@@ -152,19 +152,20 @@ class EsolangInterpreter:
     - logic_lines: List of lines in the LOGIC section.
     """
     def parse_logic(self, logic_lines):
-        """Parse the LOGIC section and store rules."""
+        #Parse the LOGIC section and store rules.
         for line in logic_lines:
+            # Get the name of the rule, by removing 'rule' and stores the statement after the ':'
             if line.startswith("rule"):
                 _, name, operation = line.split(" ", 2)
                 name = name.rstrip(":")
                 condition = None
                 result = None
-
+                #  After the '->' store the condition, removing 'if' if a condition is present.
                 if "->" in operation:
                     parts = operation.split("->", 1)
-                    if parts[0].strip().startswith("if "):  # Check for 'if condition'
-                        condition = parts[0].strip()[3:]  # Remove 'if ' prefix
-                    result = parts[1].strip()
+                    if parts[0].strip().startswith("if "):  
+                        condition = parts[0].strip()[3:] 
+                    result = parts[1].strip() # Items after '->' is the rules results.
                 else:
                     condition = operation.strip()
 
@@ -209,11 +210,6 @@ class EsolangInterpreter:
                     # **** HELPFUL DEBUGGING PRINT TO SEE VARIABLE UPDATES ****
                     #print(f"Debug: Variable {var} updated to {self.variables[var]}")
 
-                elif line in self.rules:  # Execute a rule
-                    output = self.execute_rule(line)
-                    if output is not False and output is not None:
-                        print(output)
-
                 elif line.startswith("ekko"):
                     _, content = line.split("(", 1)
                     content = content.rstrip(")")
@@ -250,21 +246,6 @@ class EsolangInterpreter:
                     print(f"Error: Unrecognized statement '{line}'")
 
                 i += 1
-
-    def handle_set(self, tokens):
-        var_name = tokens[1]  # Variable name after 'set'
-        expression = " ".join(tokens[3:])  # Everything after '='
-        value = self.evaluate_expression(expression)
-        if var_name in self.variables:
-            raise RuntimeError(f"Variable '{var_name}' is already defined.")
-        self.variables[var_name] = value
-
-    def handle_assignment(self, tokens):
-        var_name = tokens[0]
-        if var_name not in self.variables:
-            raise RuntimeError(f"Variable '{var_name}' is not defined. Use 'set' first.")
-        expression = " ".join(tokens[2:])
-        self.variables[var_name] = self.evaluate_expression(expression)
 
     """
     Iterates over defined range with start and end values, incrementing by step value.
@@ -325,6 +306,7 @@ class EsolangInterpreter:
     
     """
     Parses the LOGIC and FORCE sections and executes FORCE based on LOGIC.
+    Determines what lines belong in what code block in the program LOGIC or FORCE.
     Parameters:
     - file_path: Path to the file to be interpreted.  
     """
