@@ -1,0 +1,6 @@
+LOGIC
+
+FORCE
+start
+    ekko("Hello World!")
+end

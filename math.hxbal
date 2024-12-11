@@ -1,0 +1,13 @@
+LOGIC
+rule add: -> x + y
+rule mult: -> x * y
+rule mod: -> x % 2
+
+FORCE
+start
+    set x = 10
+    set y = 5
+    ekko(add)
+    ekko(mult)
+    ekko(mod)
+end

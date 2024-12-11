@@ -1,0 +1,15 @@
+LOGIC
+rule green: if state == "Green" -> "Yellow"
+rule yellow: if state == "Yellow" -> "Red"
+rule red: if state == "Red" -> "Green"
+
+FORCE
+start
+    set state = "Red"  # Initial state
+    set max_cycles = 3   # Number of cycles
+    for cycle from 0 to max_cycles step 1
+        ekko("Light State: ")
+        ekko(state)
+        state = green or yellow or red
+    end
+end

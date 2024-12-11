@@ -1,0 +1,14 @@
+LOGIC
+rule fizzbuzz: if n % 15 == 0 -> "FizzBuzz"
+rule fizz: if n % 3 == 0 -> "Fizz"
+rule buzz: if n % 5 == 0 -> "Buzz"
+rule default: -> n
+
+FORCE
+start
+    set n = 1
+    set max = 15
+    for n from n to max step 1
+        ekko(fizzbuzz or fizz or buzz or default)
+    end
+end
